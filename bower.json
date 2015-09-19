@@ -1,0 +1,15 @@
+{
+  "name": "break_the_ice",
+  "version": "1.0.0",
+  "description": "The server for the break_the_ice app",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.2"
+  }
+}
