@@ -34,6 +34,13 @@ class Message
     private $chat;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     */
+    private $text;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
@@ -152,5 +159,44 @@ class Message
     public function getChat()
     {
         return $this->chat;
+    }
+
+    /**
+     * Set text
+     *
+     * @param string $text
+     *
+     * @return Chat
+     */
+    public function setText($text)
+    {
+        $this->text = $text;
+
+        return $this;
+    }
+
+    /**
+     * Get text
+     *
+     * @return string
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
+
+    /**
+     * Specify data which should be serialized to JSON
+     */
+    function jsonSerialize()
+    {
+        return [
+            'id' => $this->id,
+            'sender' => $this->sender,
+            'chat' => $this->chat,
+            'text' => $this->text,
+            'created' => $this->created,
+            'status' => $this->status,
+        ];
     }
 }

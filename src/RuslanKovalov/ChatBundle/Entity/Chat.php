@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="RuslanKovalov\ChatBundle\Entity\Repository\ChatRepository")
  */
-class Chat
+class Chat implements \JsonSerializable
 {
     /**
      * @var integer
@@ -31,13 +31,6 @@ class Chat
      * @ORM\OneToMany(targetEntity="Message", mappedBy="chat")
      */
     private $messages;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string")
-     */
-    private $text;
 
     /**
      * @var \DateTime
@@ -63,30 +56,6 @@ class Chat
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set text
-     *
-     * @param string $text
-     *
-     * @return Chat
-     */
-    public function setText($text)
-    {
-        $this->text = $text;
-
-        return $this;
-    }
-
-    /**
-     * Get text
-     *
-     * @return string
-     */
-    public function getText()
-    {
-        return $this->text;
     }
 
     /**
@@ -179,5 +148,39 @@ class Chat
     public function getMessages()
     {
         return $this->messages;
+    }
+
+    /**
+     * Specify data which should be serialized to JSON
+     */
+    function jsonSerialize()
+    {
+        $userIds =$this->getUsers()
+            ->map(
+                function(User $entity)
+                {
+                    $interestIds[] = $entity->getId();
+                    return $interestIds;
+                }
+            )
+            ->getValues();
+
+        $messageIds =$this->getMessages()
+            ->map(
+                function(Message $entity)
+                {
+                    $interestIds[] = $entity->getId();
+                    return $interestIds;
+                }
+            )
+            ->getValues();
+
+
+        return [
+            'id' => $this->getId(),
+            'userIds' => $userIds,
+            'messageIds' => $messageIds,
+            'created' => $this->getCreated(),
+        ];
     }
 }

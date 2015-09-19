@@ -149,4 +149,37 @@ class User
     {
         return $this->messages;
     }
+
+    /**
+     * Specify data which should be serialized to JSON
+     */
+    function jsonSerialize()
+    {
+        $chatIds = $this->getChats()
+            ->map(
+                function(Chat $entity)
+                {
+                    $interestIds[] = $entity->getId();
+                    return $interestIds;
+                }
+            )
+            ->getValues();
+
+        $messageIds =$this->getMessages()
+            ->map(
+                function(Message $entity)
+                {
+                    $interestIds[] = $entity->getId();
+                    return $interestIds;
+                }
+            )
+            ->getValues();
+
+        return [
+            'id' => $this->getId(),
+            'username' => $this->getUsername(),
+            'chatIds' => $chatIds,
+            'messageIds' => $messageIds,
+        ];
+    }
 }
