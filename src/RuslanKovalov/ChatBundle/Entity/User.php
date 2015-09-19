@@ -30,7 +30,7 @@ class User
     private $username;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Chat", mappedBy="users")
+     * @ORM\ManyToMany(targetEntity="Chat", inversedBy="users")
      */
     private $chats;
 

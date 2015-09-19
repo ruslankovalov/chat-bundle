@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="RuslanKovalov\ChatBundle\Entity\Repository\MessageRepository")
  */
-class Message
+class Message implements \JsonSerializable
 {
     /**
      * @var integer
@@ -22,14 +22,14 @@ class Message
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="messages")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="messages", cascade={"persist"})
      */
     private $sender;
 
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Chat", inversedBy="messages")
+     * @ORM\ManyToOne(targetEntity="Chat", inversedBy="messages", cascade={"persist"})
      */
     private $chat;
 
@@ -191,12 +191,12 @@ class Message
     function jsonSerialize()
     {
         return [
-            'id' => $this->id,
-            'sender' => $this->sender,
-            'chat' => $this->chat,
-            'text' => $this->text,
-            'created' => $this->created,
-            'status' => $this->status,
+            'id' => $this->getId(),
+            'sender' => $this->getSender()->getId(),
+            'chat' => $this->getChat()->getId(),
+            'text' => $this->getText(),
+            'created' => $this->getCreated(),
+            'status' => $this->getStatus(),
         ];
     }
 }

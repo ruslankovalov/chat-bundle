@@ -14,7 +14,6 @@ class MessageType extends AbstractType
             ->add('text', 'text')
             ->add('chat', 'entity', ['class' => 'RuslanKovalov\ChatBundle\Entity\Chat'])
             ->add('sender', 'entity', ['class' => 'RuslanKovalov\ChatBundle\Entity\User'])
-            ->add('status', 'text')
         ;
     }
 

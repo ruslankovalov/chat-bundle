@@ -27,6 +27,7 @@ class ChatController extends JsonController
         $chat = new Chat();
         $form = $this->createForm(new ChatType());
         $this->handleJsonForm($form, $request);
+        $chat->setCreated(new \DateTime());
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($chat);
@@ -36,7 +37,7 @@ class ChatController extends JsonController
     }
 
     /**
-     * @Route("/api/message/new")
+     * @Route("/api/chat/message/new")
      * @Method({"POST"})
      * @param Request $request
      * @return JsonResponse
@@ -46,6 +47,11 @@ class ChatController extends JsonController
         $message = new Message();
         $form = $this->createForm(new MessageType(), $message);
         $this->handleJsonForm($form, $request);
+        $message
+            ->setStatus('sent')
+            ->setCreated(new \DateTime())
+        ;
+
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($message);
@@ -55,7 +61,7 @@ class ChatController extends JsonController
     }
 
     /**
-     * @Route("/api/message/{id}/update, requirements={"id" = "\d+"})
+     * @Route("/api/chat/message/{id}/status", requirements={"id" = "\d+"})
      * @Method({"PUT"})
      * @param Request $request
      * @param $id
